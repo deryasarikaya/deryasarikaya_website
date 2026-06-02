@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Derya Sarikaya{% endblock %}</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Mono:wght@300;400;500&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+    <style>
+        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+        :root {
+            --ink: #0f0e0c;
+            --paper: #f5f2ed;
+            --accent: #c84b2f;
+            --muted: #8a8279;
+            --border: #ddd9d2;
+            --serif: 'DM Serif Display', Georgia, serif;
+            --mono: 'DM Mono', monospace;
+            --sans: 'DM Sans', sans-serif;
+        }
+
+        html { scroll-behavior: smooth; }
+
+        body {
+            background: var(--paper);
+            color: var(--ink);
+            font-family: var(--sans);
+            font-size: 16px;
+            line-height: 1.6;
+            min-height: 100vh;
+        }
+
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1.5rem 4rem;
+            border-bottom: 1px solid var(--border);
+            position: sticky;
+            top: 0;
+            background: var(--paper);
+            z-index: 100;
+        }
+
+        .nav-logo {
+            font-family: var(--mono);
+            font-size: 0.85rem;
+            color: var(--accent);
+            text-decoration: none;
+            letter-spacing: 0.05em;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2.5rem;
+            list-style: none;
+        }
+
+        .nav-links a {
+            font-family: var(--mono);
+            font-size: 0.8rem;
+            color: var(--muted);
+            text-decoration: none;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            transition: color 0.2s;
+        }
+
+        .nav-links a:hover, .nav-links a.active { color: var(--ink); }
+
+        main {
+            max-width: 1100px;
+            margin: 0 auto;
+            padding: 0 4rem;
+        }
+
+        footer {
+            margin-top: 6rem;
+            padding: 2rem 4rem;
+            border-top: 1px solid var(--border);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+        }
+
+        footer p {
+            font-family: var(--mono);
+            font-size: 0.75rem;
+            color: var(--muted);
+        }
+
+        footer a { color: var(--accent); text-decoration: none; }
+        footer a:hover { text-decoration: underline; }
+
+        @media (max-width: 768px) {
+            nav { padding: 1.2rem 1.5rem; }
+            main { padding: 0 1.5rem; }
+            footer { padding: 1.5rem; flex-direction: column; text-align: center; }
+            .nav-links { gap: 1.2rem; }
+        }
+    </style>
+    {% block head %}{% endblock %}
+</head>
+<body>
+    <nav>
+        <a href="/" class="nav-logo">derya@deryasarikaya.ai</a>
+        <ul class="nav-links">
+            <li><a href="/" {% if request.path == '/' %}class="active"{% endif %}>Home</a></li>
+            <li><a href="/about" {% if request.path == '/about' %}class="active"{% endif %}>Über mich</a></li>
+            <li><a href="/projects" {% if request.path == '/projects' %}class="active"{% endif %}>Projekte</a></li>
+            <li><a href="/contact" {% if request.path == '/contact' %}class="active"{% endif %}>Kontakt</a></li>
+        </ul>
+    </nav>
+
+    <main>
+        {% block content %}{% endblock %}
+    </main>
+
+    <footer>
+        <p>© 2026 Derya Sarikaya — <a href="mailto:derya@deryasarikaya.ai">derya@deryasarikaya.ai</a></p>
+        <p><a href="/impressum">Impressum</a></p>
+    </footer>
+</body>
+</html>

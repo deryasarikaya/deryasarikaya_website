@@ -1,0 +1,185 @@
+{% extends "base.html" %}
+
+{% block title %}Über mich — Derya Sarikaya{% endblock %}
+
+{% block head %}
+<style>
+    .about-wrap {
+        padding: 5rem 0;
+        display: grid;
+        grid-template-columns: 1fr 1.6fr;
+        gap: 6rem;
+        align-items: start;
+    }
+
+    .about-photo-col {
+        position: sticky;
+        top: 6rem;
+    }
+
+    .about-photo {
+        width: 100%;
+        aspect-ratio: 4/5;
+        object-fit: contain;
+        object-position: center center;
+        display: block;
+        filter: grayscale(15%);
+    }
+
+    .photo-caption {
+        font-family: var(--mono);
+        font-size: 0.72rem;
+        color: var(--muted);
+        margin-top: 0.75rem;
+        letter-spacing: 0.05em;
+    }
+
+    .about-text-col {
+        padding-top: 1rem;
+    }
+
+    .about-label {
+        font-family: var(--mono);
+        font-size: 0.75rem;
+        color: var(--accent);
+        letter-spacing: 0.12em;
+        text-transform: uppercase;
+        margin-bottom: 1rem;
+    }
+
+    .about-text-col h1 {
+        font-family: var(--serif);
+        font-size: 3rem;
+        line-height: 1.1;
+        margin-bottom: 2.5rem;
+    }
+
+    .about-body {
+        font-size: 1.05rem;
+        color: var(--ink);
+        line-height: 1.9;
+        font-weight: 300;
+    }
+
+    .about-body p {
+        margin-bottom: 1.5rem;
+    }
+
+    .about-body p:first-child {
+        font-size: 1.15rem;
+        font-weight: 400;
+    }
+
+    .about-divider {
+        border: none;
+        border-top: 1px solid var(--border);
+        margin: 2.5rem 0;
+    }
+
+    .facts-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 1.5rem;
+        margin-bottom: 2.5rem;
+    }
+
+    .fact {
+        padding: 1.25rem;
+        border: 1px solid var(--border);
+    }
+
+    .fact-label {
+        font-family: var(--mono);
+        font-size: 0.68rem;
+        color: var(--accent);
+        letter-spacing: 0.1em;
+        text-transform: uppercase;
+        margin-bottom: 0.4rem;
+    }
+
+    .fact-value {
+        font-family: var(--sans);
+        font-size: 0.9rem;
+        font-weight: 500;
+        color: var(--ink);
+    }
+
+    .cv-btn {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.75rem;
+        background: var(--ink);
+        color: var(--paper);
+        padding: 0.9rem 2rem;
+        text-decoration: none;
+        font-family: var(--mono);
+        font-size: 0.8rem;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+        transition: background 0.2s;
+        margin-top: 0.5rem;
+    }
+
+    .cv-btn:hover { background: var(--accent); }
+
+    @media (max-width: 768px) {
+        .about-wrap { grid-template-columns: 1fr; gap: 2.5rem; padding: 3rem 0; }
+        .about-photo-col { position: static; }
+        .about-photo { aspect-ratio: 1/1; }
+        .about-text-col h1 { font-size: 2.2rem; }
+        .facts-grid { grid-template-columns: 1fr; }
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="about-wrap">
+    <div class="about-photo-col">
+        <img src="/static/derya.jpeg" alt="Derya Sarikaya" class="about-photo">
+
+    </div>
+
+    <div class="about-text-col">
+        <p class="about-label">Über mich</p>
+        <h1>Hi, ich bin Derya.</h1>
+
+        <div class="about-body">
+            <p>Diplom-Ingenieurin, AI Engineer und Builder.</p>
+
+            <p>Nach über zehn Jahren im Engineering und in der Automobilindustrie habe ich mich entschieden, Technologie neu zu denken - mit KI, Automatisierung und digitalen Produkten.</p>
+
+            <p>Ich liebe es, komplexe Probleme einfach zu machen. Vielleicht liegt das daran, dass mein Leben selten geradlinig war. Ich habe in verschiedenen Ländern gelebt, gemeinsam mit meinem Sohn die Welt bereist und immer wieder neue Wege eingeschlagen. Dabei habe ich gelernt, Chancen dort zu erkennen, wo andere vor allem Hindernisse sehen.</p>
+
+            <p>Heute verbinde ich technisches Denken mit Kreativität, Neugier und dem Wunsch, Technologie sinnvoll einzusetzen.</p>
+
+            <p>Diese Website ist mein digitales Zuhause. Hier entstehen Projekte, Ideen und alles, was ich auf meinem Weg durch die Welt von AI und Tech erschaffe.</p>
+        </div>
+
+        <hr class="about-divider">
+
+        <div class="facts-grid">
+            <div class="fact">
+                <p class="fact-label">Background</p>
+                <p class="fact-value">Diplom-Ingenieurin (FH)</p>
+            </div>
+            <div class="fact">
+                <p class="fact-label">Erfahrung</p>
+                <p class="fact-value">10+ Jahre Mercedes-Benz</p>
+            </div>
+            <div class="fact">
+                <p class="fact-label">Aktuell</p>
+                <p class="fact-value">AI Engineering @ Masterschool</p>
+            </div>
+            <div class="fact">
+                <p class="fact-label">Standort</p>
+                <p class="fact-value">Stuttgart, Deutschland</p>
+            </div>
+        </div>
+
+        <a href="/static/cv_derya_sarikaya.pdf" class="cv-btn" download>
+            ↓ Lebenslauf herunterladen
+        </a>
+        <p style="font-family: var(--mono); font-size: 0.7rem; color: var(--muted); margin-top: 0.75rem;">// CV wird bald verfügbar sein</p>
+    </div>
+</div>
+{% endblock %}
