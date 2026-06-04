@@ -5,11 +5,20 @@
 {% block head %}
 <style>
     .hero {
-        padding: 7rem 0 5rem;
+        padding: 6rem 0 5rem;
         display: grid;
         grid-template-columns: 1fr 1fr;
-        gap: 4rem;
-        align-items: center;
+        gap: 5rem;
+        align-items: start;
+    }
+
+    .hero-left { display: flex; flex-direction: column; gap: 2rem; }
+
+    .hero-name {
+        font-family: var(--serif);
+        font-size: 4.5rem;
+        line-height: 0.95;
+        letter-spacing: -0.02em;
     }
 
     .hero-label {
@@ -18,40 +27,28 @@
         color: var(--accent);
         letter-spacing: 0.12em;
         text-transform: uppercase;
-        margin-bottom: 1.5rem;
+        margin-top: 1.5rem;
     }
 
     .hero h1 {
         font-family: var(--serif);
-        font-size: 4rem;
+        font-size: 3rem;
         line-height: 1.05;
-        margin-bottom: 1.5rem;
         letter-spacing: -0.02em;
     }
 
-    .hero h1 em {
-        font-style: italic;
-        color: var(--accent);
-    }
+    .hero h1 em { font-style: italic; color: var(--accent); }
 
     .hero-text {
         font-size: 1.05rem;
         color: var(--muted);
-        line-height: 1.8;
-        margin-bottom: 2.5rem;
+        line-height: 1.9;
         font-weight: 300;
     }
 
-    .hero-text strong {
-        color: var(--ink);
-        font-weight: 500;
-    }
+    .hero-text strong { color: var(--ink); font-weight: 500; }
 
-    .hero-cta {
-        display: flex;
-        gap: 1rem;
-        flex-wrap: wrap;
-    }
+    .hero-cta { display: flex; gap: 1rem; flex-wrap: wrap; }
 
     .btn-primary {
         background: var(--ink);
@@ -63,6 +60,9 @@
         letter-spacing: 0.08em;
         text-transform: uppercase;
         transition: background 0.2s;
+        border: none;
+        cursor: pointer;
+        display: inline-block;
     }
 
     .btn-primary:hover { background: var(--accent); }
@@ -77,14 +77,21 @@
         letter-spacing: 0.08em;
         text-transform: uppercase;
         transition: border-color 0.2s;
+        background: transparent;
+        cursor: pointer;
+        display: inline-block;
     }
 
     .btn-secondary:hover { border-color: var(--ink); }
 
-    .hero-visual {
-        display: flex;
-        flex-direction: column;
-        gap: 1rem;
+    .hero-visual { display: flex; flex-direction: column; gap: 1rem; }
+
+    .hero-photo {
+        width: 100%;
+        aspect-ratio: 1/1;
+        object-fit: cover;
+        object-position: center center;
+        display: block;
     }
 
     .terminal {
@@ -100,11 +107,7 @@
     .terminal .prompt { color: var(--accent); }
     .terminal .comment { color: #555; }
 
-    .skills-row {
-        display: flex;
-        flex-wrap: wrap;
-        gap: 0.5rem;
-    }
+    .skills-row { display: flex; flex-wrap: wrap; gap: 0.5rem; }
 
     .skill-tag {
         font-family: var(--mono);
@@ -115,10 +118,8 @@
         letter-spacing: 0.05em;
     }
 
-    .section {
-        padding: 5rem 0;
-        border-top: 1px solid var(--border);
-    }
+    /* SECTIONS */
+    .section { padding: 5rem 0; border-top: 1px solid var(--border); }
 
     .section-label {
         font-family: var(--mono);
@@ -129,65 +130,135 @@
         margin-bottom: 0.75rem;
     }
 
-    .section h2 {
-        font-family: var(--serif);
-        font-size: 2.2rem;
-        margin-bottom: 3rem;
+    .section h2 { font-family: var(--serif); font-size: 2.2rem; margin-bottom: 2rem; }
+
+    /* ABOUT */
+    .about-grid { display: grid; grid-template-columns: 1fr 1.8fr; gap: 4rem; align-items: start; }
+
+    .about-photo {
+        width: 100%;
+        aspect-ratio: 3/4;
+        object-fit: cover;
+        object-position: top center;
+        display: block;
     }
 
-    .cards {
-        display: grid;
-        grid-template-columns: repeat(3, 1fr);
-        gap: 1.5rem;
+    .about-body p {
+        font-size: 1rem;
+        color: var(--ink);
+        line-height: 1.9;
+        margin-bottom: 1rem;
+        font-weight: 300;
     }
 
-    .card {
-        padding: 2rem;
+    .facts { display: grid; grid-template-columns: repeat(2, 1fr); gap: 0.75rem; margin-top: 2rem; }
+
+    .fact { padding: 1rem; border: 1px solid var(--border); }
+
+    .fact-label {
+        font-family: var(--mono);
+        font-size: 0.6rem;
+        color: var(--accent);
+        text-transform: uppercase;
+        margin-bottom: 0.3rem;
+        letter-spacing: 0.08em;
+    }
+
+    .fact-value { font-size: 0.85rem; font-weight: 500; }
+
+    /* CARDS */
+    .cards { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.5rem; }
+
+    .card { padding: 2rem; border: 1px solid var(--border); transition: border-color 0.2s; }
+    .card:hover { border-color: var(--ink); }
+    .card-icon { font-size: 1.5rem; margin-bottom: 1rem; }
+    .card h3 { font-family: var(--serif); font-size: 1.2rem; margin-bottom: 0.75rem; }
+    .card p { font-size: 0.9rem; color: var(--muted); line-height: 1.7; }
+
+    /* PROJECTS */
+    .project-card {
         border: 1px solid var(--border);
+        padding: 2rem;
+        display: flex;
+        justify-content: space-between;
+        gap: 2rem;
+        align-items: start;
         transition: border-color 0.2s;
     }
+    .project-card:hover { border-color: var(--ink); }
+    .project-num { font-family: var(--mono); font-size: 0.65rem; color: var(--accent); margin-bottom: 0.75rem; }
+    .project-card h3 { font-family: var(--serif); font-size: 1.4rem; margin-bottom: 0.5rem; }
+    .project-card p { font-size: 0.9rem; color: var(--muted); line-height: 1.7; margin-bottom: 1.25rem; }
+    .project-links a { font-family: var(--mono); font-size: 0.75rem; color: var(--accent); text-decoration: none; margin-right: 1rem; }
+    .wip { border: 1px dashed var(--border); padding: 2rem; text-align: center; margin-top: 1rem; font-family: var(--mono); font-size: 0.8rem; color: var(--muted); }
 
-    .card:hover { border-color: var(--ink); }
+    /* CONTACT */
+    .contact-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 4rem; }
+    .contact-intro { font-size: 1rem; color: var(--muted); line-height: 1.8; margin-bottom: 2rem; font-weight: 300; }
+    .contact-link { display: flex; align-items: center; gap: 0.75rem; padding: 0.85rem 1.1rem; border: 1px solid var(--border); font-family: var(--mono); font-size: 0.78rem; text-decoration: none; color: var(--ink); margin-bottom: 0.75rem; transition: border-color 0.2s; }
+    .contact-link:hover { border-color: var(--ink); }
+    .form-group { margin-bottom: 1rem; }
+    .form-label { font-family: var(--mono); font-size: 0.65rem; color: var(--muted); text-transform: uppercase; display: block; margin-bottom: 0.4rem; letter-spacing: 0.08em; }
+    .form-input { width: 100%; border: 1px solid var(--border); padding: 0.7rem 0.9rem; background: transparent; font-family: var(--sans); font-size: 0.92rem; color: var(--ink); outline: none; transition: border-color 0.2s; }
+    .form-input:focus { border-color: var(--ink); }
+    .form-textarea { width: 100%; border: 1px solid var(--border); padding: 0.7rem 0.9rem; background: transparent; font-family: var(--sans); font-size: 0.92rem; color: var(--ink); min-height: 130px; resize: vertical; outline: none; transition: border-color 0.2s; }
+    .form-textarea:focus { border-color: var(--ink); }
 
-    .card-icon { font-size: 1.5rem; margin-bottom: 1rem; }
-
-    .card h3 {
-        font-family: var(--serif);
-        font-size: 1.2rem;
-        margin-bottom: 0.75rem;
-    }
-
-    .card p {
-        font-size: 0.9rem;
-        color: var(--muted);
-        line-height: 1.7;
-    }
+    /* IMPRESSUM */
+    .impressum-wrap { padding: 5rem 0; max-width: 700px; }
+    .impressum-wrap h1 { font-family: var(--serif); font-size: 2.5rem; margin-bottom: 2.5rem; }
+    .impressum-section { margin-bottom: 2rem; padding-bottom: 2rem; border-bottom: 1px solid var(--border); }
+    .impressum-section:last-child { border-bottom: none; }
+    .impressum-section h2 { font-family: var(--mono); font-size: 0.72rem; color: var(--accent); letter-spacing: 0.1em; text-transform: uppercase; margin-bottom: 0.75rem; }
+    .impressum-section p { font-size: 0.95rem; line-height: 1.8; margin-bottom: 0.5rem; }
+    .impressum-section a { color: var(--accent); text-decoration: none; }
 
     @media (max-width: 768px) {
-        .hero { grid-template-columns: 1fr; padding: 4rem 0 3rem; gap: 2.5rem; }
-        .hero h1 { font-size: 2.8rem; }
+        .hero { grid-template-columns: 1fr; padding: 3rem 0; gap: 2.5rem; }
+        .hero-visual { order: -1; }
+        .hero-name { font-size: 3rem; }
+        .hero h1 { font-size: 2.2rem; }
+        .about-grid { grid-template-columns: 1fr; }
+        .facts { grid-template-columns: 1fr 1fr; }
         .cards { grid-template-columns: 1fr; }
+        .contact-grid { grid-template-columns: 1fr; }
     }
 </style>
 {% endblock %}
 
 {% block content %}
-<section class="hero">
+
+<!-- HERO -->
+<section class="hero" id="hero">
     <div class="hero-left">
-        <p class="hero-label">AI Engineer | AI Product Management</p>
-        <h1>Ich baue <em>intelligente</em> Lösungen mit KI.</h1>
+        <div>
+            <h2 class="hero-name">Derya Sarikaya</h2>
+            <p class="hero-label">AI Engineer | AI Product Management</p>
+        </div>
+        <h1>
+            <span class="de-i">Ich baue <em>intelligente</em> Lösungen mit KI.</span>
+            <span class="en-i">I build <em>intelligent</em> solutions with AI.</span>
+        </h1>
         <p class="hero-text">
-            Diplom-Ingenieurin mit <strong>10+ Jahren Industrieerfahrung bei Mercedes-Benz</strong> —
-            heute spezialisiert auf AI Engineering, LLM-Anwendungen
-            und intelligente Automatisierung.
+            <span class="de-i">Diplom-Ingenieurin mit <strong>10+ Jahren Industrieerfahrung bei Mercedes-Benz</strong>.<br>
+            Heute spezialisiert auf AI Engineering, LLM-Anwendungen und intelligente Automatisierung.</span>
+            <span class="en-i">Diplom-Engineer with <strong>10+ years of industry experience at Mercedes-Benz</strong>.<br>
+            Now specializing in AI Engineering, LLM applications and intelligent automation.</span>
         </p>
         <div class="hero-cta">
-            <a href="/projects" class="btn-primary">Projekte ansehen</a>
-            <a href="/contact" class="btn-secondary">Kontakt</a>
+            <a href="#projekte" class="btn-primary">
+                <span class="de-i">Projekte ansehen</span>
+                <span class="en-i">View projects</span>
+            </a>
+            <a href="#kontakt" class="btn-secondary">
+                <span class="de-i">Kontakt</span>
+                <span class="en-i">Contact</span>
+            </a>
         </div>
     </div>
 
     <div class="hero-visual">
+        <img src="/static/derya.jpeg" alt="Derya Sarikaya" class="hero-photo">
         <div class="terminal">
             <span class="comment"># derya_sarikaya.py</span><br>
             <span class="prompt">→</span> from skills import ai_engineering<br>
@@ -196,7 +267,7 @@
             <br>
             <span class="comment"># Currently building:</span><br>
             <span class="prompt">→</span> print(ai_engineering.build())<br>
-            <span style="color: #f5f2ed;">  "Building something great..."</span>
+            <span style="color:#f5f2ed">  "Building something great..."</span>
         </div>
         <div class="skills-row">
             <span class="skill-tag">Python</span>
@@ -211,25 +282,141 @@
     </div>
 </section>
 
-<section class="section">
-    <p class="section-label">Was ich anbiete</p>
-    <h2>Meine Schwerpunkte</h2>
+<!-- ABOUT -->
+<section class="section" id="about">
+    <p class="section-label"><span class="de-i">Über mich</span><span class="en-i">About me</span></p>
+    <h2><span class="de-i">Hi, ich bin Derya.</span><span class="en-i">Hi, I'm Derya.</span></h2>
+    <div class="about-grid">
+        <img src="/static/derya.jpeg" alt="Derya Sarikaya" class="about-photo">
+        <div>
+            <div class="about-body">
+                <p><span class="de-i">Diplom-Ingenieurin, AI Engineer und Builder.</span><span class="en-i">Diplom-Engineer, AI Engineer and Builder.</span></p>
+                <p><span class="de-i">Nach über zehn Jahren im Engineering und in der Automobilindustrie habe ich mich entschieden, Technologie neu zu denken – mit KI, Automatisierung und digitalen Produkten.</span><span class="en-i">After more than ten years in engineering and the automotive industry, I decided to rethink technology – with AI, automation and digital products.</span></p>
+                <p><span class="de-i">Ich liebe es, komplexe Probleme einfach zu machen. Ich habe in verschiedenen Ländern gelebt, gemeinsam mit meinem Sohn die Welt bereist und immer wieder neue Wege eingeschlagen. Dabei habe ich gelernt, Chancen dort zu erkennen, wo andere vor allem Hindernisse sehen.</span><span class="en-i">I love making complex problems simple. I've lived in different countries, traveled the world with my son, and always found new paths forward — learning to see opportunities where others see obstacles.</span></p>
+                <p><span class="de-i">Heute verbinde ich technisches Denken mit Kreativität, Neugier und dem Wunsch, Technologie sinnvoll einzusetzen.</span><span class="en-i">Today I combine technical thinking with creativity, curiosity and the desire to use technology meaningfully.</span></p>
+            </div>
+            <div class="facts">
+                <div class="fact"><p class="fact-label">Background</p><p class="fact-value">Diplom-Ingenieurin (FH)</p></div>
+                <div class="fact"><p class="fact-label"><span class="de-i">Erfahrung</span><span class="en-i">Experience</span></p><p class="fact-value">10+ Jahre Mercedes-Benz</p></div>
+                <div class="fact"><p class="fact-label"><span class="de-i">Aktuell</span><span class="en-i">Currently</span></p><p class="fact-value">AI Engineering @ Masterschool</p></div>
+                <div class="fact"><p class="fact-label"><span class="de-i">Standort</span><span class="en-i">Location</span></p><p class="fact-value">Stuttgart, DE</p></div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- SCHWERPUNKTE -->
+<section class="section" id="schwerpunkte">
+    <p class="section-label"><span class="de-i">Was ich anbiete</span><span class="en-i">What I offer</span></p>
+    <h2><span class="de-i">Meine Schwerpunkte</span><span class="en-i">My focus areas</span></h2>
     <div class="cards">
         <div class="card">
             <div class="card-icon">⚡</div>
-            <h3>AI Automatisierung</h3>
-            <p>Workflows und Prozesse automatisieren mit LLM-APIs, Agenten und intelligenten Pipelines.</p>
+            <h3><span class="de-i">AI Automatisierung</span><span class="en-i">AI Automation</span></h3>
+            <p><span class="de-i">Workflows und Prozesse automatisieren mit LLM-APIs, Agenten und intelligenten Pipelines.</span><span class="en-i">Automating workflows with LLM APIs, agents and intelligent pipelines.</span></p>
         </div>
         <div class="card">
             <div class="card-icon">🔧</div>
-            <h3>AI Tool Entwicklung</h3>
-            <p>Maßgeschneiderte AI-Tools und Anwendungen mit Python, APIs und modernen LLM-Frameworks.</p>
+            <h3><span class="de-i">AI Tool Entwicklung</span><span class="en-i">AI Tool Development</span></h3>
+            <p><span class="de-i">Maßgeschneiderte AI-Tools und Anwendungen mit Python, APIs und modernen LLM-Frameworks.</span><span class="en-i">Custom AI tools and applications with Python, APIs and modern LLM frameworks.</span></p>
         </div>
         <div class="card">
             <div class="card-icon">🧠</div>
             <h3>AI Product Management</h3>
-            <p>Von der Idee zum AI-Produkt — Nutzerbedürfnisse, Priorisierung, MVPs und intelligente Features.</p>
+            <p><span class="de-i">Von der Idee zum AI-Produkt — Nutzerbedürfnisse, Priorisierung, MVPs und intelligente Features.</span><span class="en-i">From idea to AI product — user needs, prioritization, MVPs and intelligent features.</span></p>
         </div>
     </div>
 </section>
+
+<!-- PROJEKTE -->
+<section class="section" id="projekte">
+    <p class="section-label">Portfolio</p>
+    <h2><span class="de-i">Meine Projekte</span><span class="en-i">My Projects</span></h2>
+    <div class="project-card">
+        <div>
+            <p class="project-num">01</p>
+            <h3>Personal Portfolio Website</h3>
+            <p><span class="de-i">Persönliche Portfolio-Website mit Flask, individuellem Design und eigener Domain zur Präsentation von Projekten und technischen Fähigkeiten.</span><span class="en-i">Personal portfolio website with Flask, custom design and own domain to showcase projects and technical skills.</span></p>
+            <div class="skills-row" style="margin-bottom:1.25rem;">
+                <span class="skill-tag">Python</span>
+                <span class="skill-tag">Flask</span>
+                <span class="skill-tag">HTML/CSS</span>
+                <span class="skill-tag">Render</span>
+            </div>
+            <div class="project-links">
+                <a href="https://github.com/deryasarikaya" target="_blank">GitHub ↗</a>
+                <a href="https://deryasarikaya.ai" target="_blank">Live Demo ↗</a>
+            </div>
+        </div>
+        <div style="color:var(--muted); font-size:1.2rem; padding-top:0.5rem;">↗</div>
+    </div>
+    <div class="wip">
+        <span class="de-i">// Weitere Projekte kommen bald — gerade im Aufbau 🚧</span>
+        <span class="en-i">// More projects coming soon — currently in progress 🚧</span>
+    </div>
+</section>
+
+<!-- KONTAKT -->
+<section class="section" id="kontakt">
+    <p class="section-label"><span class="de-i">Kontakt</span><span class="en-i">Contact</span></p>
+    <h2><span class="de-i">Lass uns reden.</span><span class="en-i">Let's talk.</span></h2>
+    <div class="contact-grid">
+        <div>
+            <p class="contact-intro">
+                <span class="de-i">Ob Idee, Projekt oder Austausch – ich freue mich von dir zu hören.</span>
+                <span class="en-i">Whether it's an idea, project, or just a chat – I'd love to hear from you.</span>
+            </p>
+            <a href="mailto:derya@deryasarikaya.ai" class="contact-link">✉ derya@deryasarikaya.ai</a>
+            <a href="https://linkedin.com/in/deryasarikaya" target="_blank" class="contact-link">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 01-2.063-2.065 2.064 2.064 0 112.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg>
+                linkedin.com/in/deryasarikaya
+            </a>
+            <a href="https://github.com/deryasarikaya" target="_blank" class="contact-link">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12"/></svg>
+                github.com/deryasarikaya
+            </a>
+        </div>
+        <div>
+            <form action="mailto:derya@deryasarikaya.ai" method="get">
+                <div class="form-group">
+                    <label class="form-label"><span class="de-i">Name</span><span class="en-i">Name</span></label>
+                    <input class="form-input" type="text" name="name" placeholder="Dein Name">
+                </div>
+                <div class="form-group">
+                    <label class="form-label">E-Mail</label>
+                    <input class="form-input" type="email" name="email" placeholder="deine@email.de">
+                </div>
+                <div class="form-group">
+                    <label class="form-label"><span class="de-i">Nachricht</span><span class="en-i">Message</span></label>
+                    <textarea class="form-textarea" name="body" placeholder="Worum geht es?"></textarea>
+                </div>
+                <button type="submit" class="btn-primary">
+                    <span class="de-i">Nachricht senden →</span>
+                    <span class="en-i">Send message →</span>
+                </button>
+            </form>
+        </div>
+    </div>
+</section>
+
+<!-- IMPRESSUM -->
+<section class="impressum-wrap" id="impressum">
+    <p class="section-label" style="border-top:1px solid var(--border); padding-top:5rem;">Rechtliches</p>
+    <h1>Impressum</h1>
+    <div class="impressum-section">
+        <h2>Angaben gemäß § 5 TMG</h2>
+        <p>Derya Sarikaya</p>
+        <p>Stuttgart, Deutschland</p>
+        <p>E-Mail: <a href="mailto:derya@deryasarikaya.ai">derya@deryasarikaya.ai</a></p>
+    </div>
+    <div class="impressum-section">
+        <h2>Haftung für Inhalte</h2>
+        <p>Die Inhalte dieser Website wurden mit größtmöglicher Sorgfalt erstellt. Für die Richtigkeit, Vollständigkeit und Aktualität kann keine Gewähr übernommen werden.</p>
+    </div>
+    <div class="impressum-section">
+        <h2>Datenschutz</h2>
+        <p>Diese Website verwendet keine Cookies und erhebt keine personenbezogenen Daten.</p>
+    </div>
+</section>
+
 {% endblock %}

@@ -8,7 +8,6 @@
     <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Mono:wght@300;400;500&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
     <style>
         *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-
         :root {
             --ink: #0f0e0c;
             --paper: #f5f2ed;
@@ -19,23 +18,14 @@
             --mono: 'DM Mono', monospace;
             --sans: 'DM Sans', sans-serif;
         }
-
         html { scroll-behavior: smooth; }
-
-        body {
-            background: var(--paper);
-            color: var(--ink);
-            font-family: var(--sans);
-            font-size: 16px;
-            line-height: 1.6;
-            min-height: 100vh;
-        }
+        body { background: var(--paper); color: var(--ink); font-family: var(--sans); font-size: 16px; line-height: 1.6; min-height: 100vh; }
 
         nav {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            padding: 1.5rem 4rem;
+            padding: 1.2rem 4rem;
             border-bottom: 1px solid var(--border);
             position: sticky;
             top: 0;
@@ -44,36 +34,55 @@
         }
 
         .nav-logo {
-            font-family: var(--mono);
-            font-size: 0.85rem;
-            color: var(--accent);
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
             text-decoration: none;
-            letter-spacing: 0.05em;
         }
 
-        .nav-links {
-            display: flex;
-            gap: 2.5rem;
-            list-style: none;
+        .nav-logo img { height: 28px; width: auto; display: block; }
+
+        .nav-logo-text {
+            font-family: var(--mono);
+            font-size: 0.75rem;
+            color: var(--accent);
+            letter-spacing: 0.04em;
         }
+
+        .nav-right { display: flex; align-items: center; gap: 2rem; }
+
+        .nav-links { display: flex; gap: 2rem; list-style: none; }
 
         .nav-links a {
             font-family: var(--mono);
-            font-size: 0.8rem;
+            font-size: 0.75rem;
             color: var(--muted);
             text-decoration: none;
             letter-spacing: 0.08em;
             text-transform: uppercase;
             transition: color 0.2s;
+            white-space: nowrap;
         }
 
-        .nav-links a:hover, .nav-links a.active { color: var(--ink); }
+        .nav-links a:hover { color: var(--ink); }
 
-        main {
-            max-width: 1100px;
-            margin: 0 auto;
-            padding: 0 4rem;
+        .lang-btn {
+            font-family: var(--mono);
+            font-size: 0.72rem;
+            background: var(--ink);
+            color: var(--paper);
+            border: none;
+            padding: 0.35rem 0.8rem;
+            cursor: pointer;
+            letter-spacing: 0.08em;
+            white-space: nowrap;
+            flex-shrink: 0;
+            transition: background 0.2s;
         }
+
+        .lang-btn:hover { background: var(--accent); }
+
+        main { max-width: 1100px; margin: 0 auto; padding: 0 4rem; }
 
         footer {
             margin-top: 6rem;
@@ -86,35 +95,42 @@
             gap: 0.5rem;
         }
 
-        footer p {
-            font-family: var(--mono);
-            font-size: 0.75rem;
-            color: var(--muted);
-        }
-
+        footer p { font-family: var(--mono); font-size: 0.75rem; color: var(--muted); }
         footer a { color: var(--accent); text-decoration: none; }
-        footer a:hover { text-decoration: underline; }
+
+        /* LANG */
+        .de { display: block; } .en { display: none; }
+        .de-i { display: inline; } .en-i { display: none; }
+        .lang-en .de { display: none; } .lang-en .en { display: block; }
+        .lang-en .de-i { display: none; } .lang-en .en-i { display: inline; }
 
         @media (max-width: 768px) {
-            nav { padding: 1.2rem 1.5rem; }
-        main { padding: 0 1.5rem; }
-        footer { padding: 1.5rem; flex-direction: column; text-align: center; }
-        .nav-links { gap: 0.8rem; }
-        .nav-links a { font-size: 0.65rem; }
-        .nav-logo { font-size: 0.7rem; }
+            nav { padding: 1rem 1.5rem; }
+            .nav-right { gap: 1rem; }
+            .nav-links { gap: 1rem; }
+            .nav-links a { font-size: 0.65rem; }
+            .nav-logo-text { display: none; }
+            main { padding: 0 1.5rem; }
+            footer { padding: 1.5rem; flex-direction: column; text-align: center; }
         }
     </style>
     {% block head %}{% endblock %}
 </head>
 <body>
     <nav>
-        <a href="/" class="nav-logo">derya@deryasarikaya.ai</a>
-        <ul class="nav-links">
-            <li><a href="/" {% if request.path == '/' %}class="active"{% endif %}>Home</a></li>
-            <li><a href="/about" {% if request.path == '/about' %}class="active"{% endif %}>Über mich</a></li>
-            <li><a href="/projects" {% if request.path == '/projects' %}class="active"{% endif %}>Projekte</a></li>
-            <li><a href="/contact" {% if request.path == '/contact' %}class="active"{% endif %}>Kontakt</a></li>
-        </ul>
+        <a href="/#hero" class="nav-logo">
+            <img src="/static/logo.png" alt="DS Logo">
+            <span class="nav-logo-text">derya@deryasarikaya.ai</span>
+        </a>
+        <div class="nav-right">
+            <ul class="nav-links">
+                <li><a href="/#hero">Home</a></li>
+                <li><a href="/#about"><span class="de-i">Über mich</span><span class="en-i">About</span></a></li>
+                <li><a href="/#projekte"><span class="de-i">Projekte</span><span class="en-i">Projects</span></a></li>
+                <li><a href="/#kontakt"><span class="de-i">Kontakt</span><span class="en-i">Contact</span></a></li>
+            </ul>
+            <button class="lang-btn" onclick="toggleLang()" id="lang-btn">EN</button>
+        </div>
     </nav>
 
     <main>
@@ -123,7 +139,30 @@
 
     <footer>
         <p>© 2026 Derya Sarikaya — <a href="mailto:derya@deryasarikaya.ai">derya@deryasarikaya.ai</a></p>
-        <p><a href="/impressum">Impressum</a></p>
+        <p><a href="/#impressum">Impressum</a></p>
     </footer>
+
+    <script>
+        function toggleLang() {
+            const isEn = document.body.classList.contains('lang-en');
+            if (isEn) {
+                document.body.classList.remove('lang-en');
+                document.getElementById('lang-btn').textContent = 'EN';
+                localStorage.setItem('lang', 'de');
+            } else {
+                document.body.classList.add('lang-en');
+                document.getElementById('lang-btn').textContent = 'DE';
+                localStorage.setItem('lang', 'en');
+            }
+        }
+        (function() {
+            const saved = localStorage.getItem('lang');
+            if (saved === 'en') {
+                document.body.classList.add('lang-en');
+                const btn = document.getElementById('lang-btn');
+                if (btn) btn.textContent = 'DE';
+            }
+        })();
+    </script>
 </body>
 </html>
