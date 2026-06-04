@@ -117,6 +117,10 @@
         object-position: center center;
     }
 
+    .mobile-hero-photo {
+        display: none;
+    }
+
     .terminal {
         border-radius: 2px;
         background: var(--ink);
@@ -376,11 +380,36 @@
     @media (max-width: 768px) {
         .hero {
             grid-template-columns: 1fr;
-            gap: 2.5rem;
+            gap: 1.5rem;
             padding: 3rem 0;
         }
 
-        .hero-visual { order: -1; }
+        .hero-left {
+            order: 1;
+            gap: 1.35rem;
+        }
+
+        .hero-visual {
+            order: 2;
+        }
+
+        .hero-visual .hero-photo {
+            display: none;
+        }
+
+        .mobile-hero-photo {
+            display: block;
+            width: 100%;
+            aspect-ratio: 1 / 1;
+            object-fit: cover;
+            object-position: center center;
+            margin-top: 0.25rem;
+        }
+
+        .hero-cta {
+            margin-top: -0.25rem;
+        }
+
         .hero-name { font-size: 3rem; }
         .hero h1 { font-size: 2.2rem; }
         .cards { grid-template-columns: 1fr; }
@@ -392,6 +421,10 @@
             grid-template-columns: 1fr;
         }
 
+        .fact {
+            min-height: auto;
+            padding: 0.9rem 1rem;
+        }
         .cv-actions {
             align-items: flex-start;
             flex-direction: column;
@@ -412,6 +445,7 @@
             <h2 class="hero-name">Derya Sarikaya</h2>
             <p class="hero-label">AI Engineer | AI Product Management</p>
         </div>
+        <img src="/static/derya.jpeg" alt="Derya Sarikaya" class="mobile-hero-photo">
         <h1>
             <span class="de-i">Ich baue <em>intelligente</em> Lösungen mit KI.</span>
             <span class="en-i">I build <em>intelligent</em> solutions with AI.</span>
@@ -438,13 +472,13 @@
         <img src="/static/derya.jpeg" alt="Derya Sarikaya" class="hero-photo">
         <div class="terminal">
             <span class="comment"># derya_sarikaya.py</span><br>
-            <span class="prompt">-&gt;</span> from skills import ai_engineering<br>
-            <span class="prompt">-&gt;</span> from skills import python, flask, sql<br>
-            <span class="prompt">-&gt;</span> from skills import langchain, fastapi<br>
+            <span class="prompt">-&gt;</span> from experience import engineering<br>
+            <span class="prompt">-&gt;</span> from ai import llm_apps, automation<br>
+            <span class="prompt">-&gt;</span> from product import strategy<br>
             <br>
             <span class="comment"># Currently building:</span><br>
-            <span class="prompt">-&gt;</span> print(ai_engineering.build())<br>
-            <span style="color:#f5f2ed">  "Building something great..."</span>
+            <span class="prompt">-&gt;</span> print(building_the_future())<br>
+            <span style="color:#f5f2ed">  "Useful AI for real workflows."</span>
         </div>
         <div class="skills-row">
             <span class="skill-tag">Python</span>
@@ -480,7 +514,7 @@
             </div>
             <div class="fact">
                 <p class="fact-label"><span class="de-i">Erfahrung</span><span class="en-i">Experience</span></p>
-                <p class="fact-value">10+ Jahre Mercedes-Benz</p>
+                <p class="fact-value"><span class="de-i">10+ Jahre Mercedes-Benz</span><span class="en-i">10+ years Mercedes-Benz</span></p>
             </div>
             <div class="fact">
                 <p class="fact-label"><span class="de-i">Aktuell</span><span class="en-i">Currently</span></p>
