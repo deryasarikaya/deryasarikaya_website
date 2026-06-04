@@ -407,7 +407,19 @@
         }
 
         .hero-cta {
+            flex-wrap: nowrap;
+            gap: 0.75rem;
             margin-top: -0.25rem;
+        }
+
+        .hero-cta .btn-primary,
+        .hero-cta .btn-secondary {
+            flex: 1 1 0;
+            min-width: 0;
+            padding: 0.8rem 0.75rem;
+            font-size: 0.72rem;
+            text-align: center;
+            white-space: nowrap;
         }
 
         .hero-name { font-size: 3rem; }
@@ -421,10 +433,6 @@
             grid-template-columns: 1fr;
         }
 
-        .fact {
-            min-height: auto;
-            padding: 0.9rem 1rem;
-        }
         .cv-actions {
             align-items: flex-start;
             flex-direction: column;
