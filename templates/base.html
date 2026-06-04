@@ -18,19 +18,28 @@
             --mono: 'DM Mono', monospace;
             --sans: 'DM Sans', sans-serif;
         }
+
         html { scroll-behavior: smooth; }
-        body { background: var(--paper); color: var(--ink); font-family: var(--sans); font-size: 16px; line-height: 1.6; min-height: 100vh; }
+
+        body {
+            min-height: 100vh;
+            background: var(--paper);
+            color: var(--ink);
+            font-family: var(--sans);
+            font-size: 16px;
+            line-height: 1.6;
+        }
 
         nav {
+            position: sticky;
+            top: 0;
+            z-index: 100;
             display: flex;
             justify-content: space-between;
             align-items: center;
             padding: 1.2rem 4rem;
             border-bottom: 1px solid var(--border);
-            position: sticky;
-            top: 0;
             background: var(--paper);
-            z-index: 100;
         }
 
         .nav-logo {
@@ -40,7 +49,7 @@
             text-decoration: none;
         }
 
-        .nav-logo img { height: 28px; width: auto; display: block; }
+        .nav-logo img { display: block; width: auto; height: 28px; }
 
         .nav-logo-text {
             font-family: var(--mono);
@@ -49,9 +58,17 @@
             letter-spacing: 0.04em;
         }
 
-        .nav-right { display: flex; align-items: center; gap: 2rem; }
+        .nav-right {
+            display: flex;
+            align-items: center;
+            gap: 2rem;
+        }
 
-        .nav-links { display: flex; gap: 2rem; list-style: none; }
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+            list-style: none;
+        }
 
         .nav-links a {
             font-family: var(--mono);
@@ -67,51 +84,88 @@
         .nav-links a:hover { color: var(--ink); }
 
         .lang-btn {
-            font-family: var(--mono);
-            font-size: 0.72rem;
+            flex-shrink: 0;
+            border: none;
             background: var(--ink);
             color: var(--paper);
-            border: none;
             padding: 0.35rem 0.8rem;
-            cursor: pointer;
+            font-family: var(--mono);
+            font-size: 0.72rem;
             letter-spacing: 0.08em;
-            white-space: nowrap;
-            flex-shrink: 0;
+            cursor: pointer;
             transition: background 0.2s;
+            white-space: nowrap;
         }
 
         .lang-btn:hover { background: var(--accent); }
 
-        main { max-width: 1100px; margin: 0 auto; padding: 0 4rem; }
+        main {
+            max-width: 1100px;
+            margin: 0 auto;
+            padding: 0 4rem;
+        }
 
         footer {
-            margin-top: 6rem;
-            padding: 2rem 4rem;
-            border-top: 1px solid var(--border);
             display: flex;
             justify-content: space-between;
             align-items: center;
             flex-wrap: wrap;
             gap: 0.5rem;
+            margin-top: 6rem;
+            padding: 2rem 4rem;
+            border-top: 1px solid var(--border);
         }
 
-        footer p { font-family: var(--mono); font-size: 0.75rem; color: var(--muted); }
-        footer a { color: var(--accent); text-decoration: none; }
+        footer p {
+            font-family: var(--mono);
+            font-size: 0.75rem;
+            color: var(--muted);
+        }
 
-        /* LANG */
-        .de { display: block; } .en { display: none; }
-        .de-i { display: inline; } .en-i { display: none; }
-        .lang-en .de { display: none; } .lang-en .en { display: block; }
-        .lang-en .de-i { display: none; } .lang-en .en-i { display: inline; }
+        footer a {
+            color: var(--accent);
+            text-decoration: none;
+        }
+
+        .de { display: block; }
+        .en { display: none; }
+        .de-i { display: inline; }
+        .en-i { display: none; }
+        .lang-en .de { display: none; }
+        .lang-en .en { display: block; }
+        .lang-en .de-i { display: none; }
+        .lang-en .en-i { display: inline; }
 
         @media (max-width: 768px) {
-            nav { padding: 1rem 1.5rem; }
-            .nav-right { gap: 1rem; }
-            .nav-links { gap: 1rem; }
-            .nav-links a { font-size: 0.65rem; }
-            .nav-logo-text { display: none; }
-            main { padding: 0 1.5rem; }
-            footer { padding: 1.5rem; flex-direction: column; text-align: center; }
+            nav {
+                padding: 1rem 1.5rem;
+            }
+
+            .nav-right {
+                gap: 1rem;
+            }
+
+            .nav-links {
+                gap: 1rem;
+            }
+
+            .nav-links a {
+                font-size: 0.65rem;
+            }
+
+            .nav-logo-text {
+                display: none;
+            }
+
+            main {
+                padding: 0 1.5rem;
+            }
+
+            footer {
+                flex-direction: column;
+                padding: 1.5rem;
+                text-align: center;
+            }
         }
     </style>
     {% block head %}{% endblock %}
@@ -138,7 +192,7 @@
     </main>
 
     <footer>
-        <p>© 2026 Derya Sarikaya — <a href="mailto:derya@deryasarikaya.ai">derya@deryasarikaya.ai</a></p>
+        <p>© 2026 Derya Sarikaya - <a href="mailto:derya@deryasarikaya.ai">derya@deryasarikaya.ai</a></p>
         <p><a href="/#impressum">Impressum</a></p>
     </footer>
 
@@ -155,6 +209,7 @@
                 localStorage.setItem('lang', 'en');
             }
         }
+
         (function() {
             const saved = localStorage.getItem('lang');
             if (saved === 'en') {
