@@ -37,7 +37,7 @@ export default async function handler(req: ApiRequest, res: ApiResponse) {
     return res.status(429).json({ error: 'Too many requests. Please try again later.' });
 
   const result = validateContact(req.body);
-  if (!result.valid)
+  if (result.valid === false)
     return res.status(400).json({ error: 'Invalid form data.', fields: result.errors });
 
   const apiKey = process.env.RESEND_API_KEY;
