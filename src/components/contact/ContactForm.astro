@@ -1,0 +1,107 @@
+---
+import type { Language } from '../../data/types';
+interface Props {
+  lang: Language;
+}
+const { lang } = Astro.props;
+const t =
+  lang === 'de'
+    ? {
+        name: 'Name',
+        email: 'E-Mail',
+        message: 'Nachricht',
+        submit: 'Nachricht senden',
+        note: 'Direkter Nachrichtenversand ist in dieser Vorschau noch nicht aktiviert. Deine Eingabe bleibt erhalten, falls die Verbindung noch nicht konfiguriert ist.',
+        status: 'Formularstatus',
+        success: 'Danke – deine Nachricht wurde gesendet.',
+        error: 'Die Nachricht konnte nicht gesendet werden. Nutze bitte LinkedIn oder GitHub.',
+        consent:
+          'Ich verstehe, dass die Formulardaten zur Bearbeitung meiner Anfrage übermittelt werden.',
+      }
+    : {
+        name: 'Name',
+        email: 'Email',
+        message: 'Message',
+        submit: 'Send message',
+        note: 'Direct message delivery is not active in this preview yet. Your text remains in the form if the connection has not been configured.',
+        status: 'Form status',
+        success: 'Thank you – your message has been sent.',
+        error: 'The message could not be sent. Please use LinkedIn or GitHub.',
+        consent: 'I understand that the form data will be transmitted to process my enquiry.',
+      };
+---
+
+<form class="contact-form" data-contact-form data-lang={lang} novalidate>
+  <p class="configuration-note">{t.note}</p>
+  <div class="form-grid">
+    <label
+      >{t.name}<input
+        name="name"
+        autocomplete="name"
+        minlength="2"
+        maxlength="100"
+        required
+      /></label
+    >
+    <label
+      >{t.email}<input
+        name="email"
+        type="email"
+        autocomplete="email"
+        maxlength="254"
+        required
+      /></label
+    >
+  </div>
+  <label
+    >{t.message}<textarea name="message" minlength="10" maxlength="3000" rows="7" required
+    ></textarea></label
+  >
+  <div class="honeypot" aria-hidden="true">
+    <label>Company<input name="company" tabindex="-1" autocomplete="off" /></label>
+  </div>
+  <input type="hidden" name="language" value={lang} />
+  <label class="consent"
+    ><input type="checkbox" name="consent" required /> <span>{t.consent}</span></label
+  >
+  <button class="button button-primary" type="submit"
+    >{t.submit} <span aria-hidden="true">→</span></button
+  >
+  <p
+    class="form-status"
+    role="status"
+    aria-live="polite"
+    data-form-status
+    data-success={t.success}
+    data-error={t.error}
+  >
+  </p>
+</form>
+
+<script>
+  document.querySelectorAll<HTMLFormElement>('[data-contact-form]').forEach((form) => {
+    const status = form.querySelector<HTMLElement>('[data-form-status]');
+    form.addEventListener('submit', async (event) => {
+      event.preventDefault();
+      if (!form.reportValidity() || !status) return;
+      const button = form.querySelector<HTMLButtonElement>('button[type="submit"]');
+      if (button) button.disabled = true;
+      status.textContent = '';
+      const body = Object.fromEntries(new FormData(form).entries());
+      try {
+        const response = await fetch('/api/contact', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(body),
+        });
+        if (!response.ok) throw new Error('not configured');
+        status.textContent = status.dataset.success || '';
+        form.reset();
+      } catch {
+        status.textContent = status.dataset.error || '';
+      } finally {
+        if (button) button.disabled = false;
+      }
+    });
+  });
+</script>

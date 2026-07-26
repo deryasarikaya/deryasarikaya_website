@@ -1,0 +1,23 @@
+{
+  "name": "Derya Sarikaya",
+  "short_name": "Derya Sarikaya",
+  "description": "AI Solutions Engineer | Technical AI Consultant",
+  "start_url": "/de/",
+  "display": "standalone",
+  "background_color": "#F6F2EA",
+  "theme_color": "#F6F2EA",
+  "icons": [
+    {
+      "src": "/icons/favicon.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/icons/apple-touch-icon.png",
+      "sizes": "180x180",
+      "type": "image/png",
+      "purpose": "any"
+    }
+  ]
+}

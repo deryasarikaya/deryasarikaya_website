@@ -1,0 +1,112 @@
+---
+import { getCollection, render } from 'astro:content';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import ProjectVisual from '../projects/ProjectVisual.astro';
+import type { Language, RouteKey } from '../../data/types';
+import { routeFor, SITE_URL } from '../../data/routes';
+import { siteCopy } from '../../data/site';
+interface Props {
+  lang: Language;
+  slug: 'ai-start-map' | 'kompass' | 'moviwebapp';
+}
+const { lang, slug } = Astro.props;
+const project = (
+  lang === 'de'
+    ? await getCollection('projectsDe', ({ data }) => data.slug === slug)
+    : await getCollection('projectsEn', ({ data }) => data.slug === slug)
+)[0];
+if (!project) throw new Error(`Missing project content: ${lang}/${slug}`);
+const { Content } = await render(project);
+const keyMap: Record<typeof slug, RouteKey> = {
+  'ai-start-map': 'projectAiStartMap',
+  kompass: 'projectKompass',
+  moviwebapp: 'projectMoviWebApp',
+};
+const routeKey = keyMap[slug];
+const copy = siteCopy[lang];
+const title = `${project.data.title} | Derya Sarikaya`;
+const breadcrumb = {
+  '@context': 'https://schema.org',
+  '@type': 'BreadcrumbList',
+  itemListElement: [
+    {
+      '@type': 'ListItem',
+      position: 1,
+      name: lang === 'de' ? 'Projekte' : 'Projects',
+      item: new URL(routeFor('projects', lang), SITE_URL).href,
+    },
+    {
+      '@type': 'ListItem',
+      position: 2,
+      name: project.data.title,
+      item: new URL(routeFor(routeKey, lang), SITE_URL).href,
+    },
+  ],
+};
+const software = {
+  '@context': 'https://schema.org',
+  '@type': 'SoftwareSourceCode',
+  name: project.data.title,
+  description: project.data.summary,
+  codeRepository: project.data.repository,
+  programmingLanguage: project.data.stack,
+  url: new URL(routeFor(routeKey, lang), SITE_URL).href,
+};
+---
+
+<BaseLayout
+  {lang}
+  {routeKey}
+  {title}
+  description={project.data.summary}
+  structuredData={[breadcrumb, software]}
+>
+  <article class="page shell case-study">
+    <nav class="breadcrumbs" aria-label={lang === 'de' ? 'Brotkrümelnavigation' : 'Breadcrumb'}>
+      <a href={routeFor('projects', lang)}>{copy.common.allProjects}</a><span aria-hidden="true"
+        >/</span
+      ><span>{project.data.title}</span>
+    </nav>
+    <header class="case-header">
+      <div>
+        <div class="case-meta">
+          <span class={`status status-${project.data.status}`}>{project.data.statusLabel}</span
+          ><span>0{project.data.order}</span>
+        </div><h1>{project.data.title}</h1><p class="case-tagline">{project.data.tagline}</p><p>
+          {project.data.summary}
+        </p>
+      </div><ul class="tag-list">{project.data.stack.map((tech) => <li>{tech}</li>)}</ul>
+    </header>
+    <ProjectVisual kind={project.data.visual} alt={project.data.alt} {lang} />
+    <div class="case-layout">
+      <aside>
+        <p class="eyebrow">{lang === 'de' ? 'Projektlinks' : 'Project links'}</p><a
+          href={project.data.repository}
+          target="_blank"
+          rel="noreferrer">{copy.common.repository} ↗</a
+        >{
+          project.data.demo && (
+            <a href={project.data.demo} target="_blank" rel="noreferrer">
+              {copy.common.liveDemo} ↗
+            </a>
+          )
+        }<p>
+          {lang === 'de' ? 'Stand geprüft' : 'Source reviewed'}<br /><strong
+            >{project.data.verifiedAt}</strong
+          >
+        </p>
+      </aside><div class="prose case-prose"><Content /></div>
+    </div>
+    {project.data.demoNote && <p class="demo-note">{project.data.demoNote}</p>}
+    <div class="page-actions">
+      <a class="button button-secondary" href={routeFor('projects', lang)}
+        >← {copy.common.allProjects}</a
+      ><a
+        class="button button-primary"
+        href={project.data.repository}
+        target="_blank"
+        rel="noreferrer">GitHub ↗</a
+      >
+    </div>
+  </article>
+</BaseLayout>

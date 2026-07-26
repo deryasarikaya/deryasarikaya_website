@@ -1,0 +1,34 @@
+---
+import type { Language } from '../../data/types';
+import { routeFor } from '../../data/routes';
+import { siteCopy } from '../../data/site';
+
+interface Props {
+  lang: Language;
+}
+const { lang } = Astro.props;
+const copy = siteCopy[lang];
+const statement =
+  lang === 'de'
+    ? 'Eigenständig im Denken. Geprägt von Engineering, Reisen und echtem Leben.'
+    : 'Independent mind. Shaped by engineering, travel and real life.';
+---
+
+<footer class="site-footer">
+  <div class="shell footer-grid">
+    <div class="footer-identity">
+      <img src="/images/brand/logo-transparent.png" width="42" height="42" alt="" loading="lazy" />
+      <div><strong>Derya Sarikaya</strong><p>{statement}</p></div>
+    </div>
+    <nav aria-label={lang === 'de' ? 'Footer-Navigation' : 'Footer navigation'}>
+      <a href="https://linkedin.com/in/deryasarikaya" target="_blank" rel="noreferrer">LinkedIn</a>
+      <a href="https://github.com/deryasarikaya" target="_blank" rel="noreferrer">GitHub</a>
+      <a href={routeFor('legal', lang)}>{lang === 'de' ? 'Impressum' : 'Legal notice'}</a>
+      <a href={routeFor('privacy', lang)}>{lang === 'de' ? 'Datenschutz' : 'Privacy'}</a>
+    </nav>
+    <div class="footer-meta">
+      <span>© {new Date().getFullYear()}</span>
+      <a href="#top">{copy.common.backTop} ↑</a>
+    </div>
+  </div>
+</footer>

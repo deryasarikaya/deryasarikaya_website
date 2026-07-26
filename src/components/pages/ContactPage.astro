@@ -1,0 +1,63 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import ContactForm from '../contact/ContactForm.astro';
+import type { Language } from '../../data/types';
+interface Props {
+  lang: Language;
+}
+const { lang } = Astro.props;
+const de = lang === 'de';
+const title = de ? 'Kontakt | Derya Sarikaya' : 'Contact | Derya Sarikaya';
+const description = de
+  ? 'Kontaktmöglichkeiten für Derya Sarikaya in Stuttgart und remote.'
+  : 'Contact options for Derya Sarikaya in Stuttgart and remotely.';
+---
+
+<BaseLayout {lang} routeKey="contact" {title} {description}>
+  <section class="page shell contact-page">
+    <header class="page-header">
+      <p class="eyebrow">{de ? 'Kontakt' : 'Contact'}</p><h1>
+        {de ? 'Lass uns reden.' : "Let's talk."}
+      </h1><p>
+        {
+          de
+            ? 'Ob konkrete Idee, technische Herausforderung oder fachlicher Austausch – ich freue mich auf eine klare, unkomplizierte Nachricht.'
+            : 'Whether you have a concrete idea, a technical challenge or simply want to exchange perspectives, I welcome a clear and straightforward message.'
+        }
+      </p>
+    </header>
+    <div class="contact-layout">
+      <aside class="contact-details">
+        <h2>{de ? 'Direkte Wege' : 'Direct routes'}</h2><ul>
+          <li>
+            <span>{de ? 'Geplant' : 'Planned'}</span><strong>info@deryasarikaya.ai</strong><small
+              >{
+                de
+                  ? 'Mailbox-Aktivierung noch nicht bestätigt'
+                  : 'Mailbox activation not yet confirmed'
+              }</small
+            >
+          </li><li>
+            <span>LinkedIn</span><a
+              href="https://linkedin.com/in/deryasarikaya"
+              target="_blank"
+              rel="noreferrer">linkedin.com/in/deryasarikaya ↗</a
+            >
+          </li><li>
+            <span>GitHub</span><a
+              href="https://github.com/deryasarikaya"
+              target="_blank"
+              rel="noreferrer">github.com/deryasarikaya ↗</a
+            >
+          </li><li>
+            <span>{de ? 'Standort' : 'Location'}</span><strong
+              >Stuttgart, {de ? 'Deutschland' : 'Germany'} · Remote</strong
+            >
+          </li>
+        </ul>
+      </aside><div>
+        <h2>{de ? 'Eine Nachricht vorbereiten' : 'Prepare a message'}</h2><ContactForm {lang} />
+      </div>
+    </div>
+  </section>
+</BaseLayout>

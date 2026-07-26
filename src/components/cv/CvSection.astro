@@ -1,0 +1,49 @@
+---
+import type { CvEntry } from '../../data/cv.types';
+interface Props {
+  title: string;
+  entries: CvEntry[];
+  id: string;
+}
+const { title, entries, id } = Astro.props;
+---
+
+<section class="cv-section" aria-labelledby={id}>
+  <h2 id={id}>{title}</h2>
+  <div class="cv-entries">
+    {
+      entries.map((entry) => (
+        <article class="cv-entry">
+          <>
+            <header>
+              <>
+                <div>
+                  <h3>{entry.title}</h3>
+                  {entry.organization && (
+                    <p>
+                      <em>{entry.organization}</em>
+                    </p>
+                  )}
+                </div>
+                <p class="cv-period">
+                  {entry.period}
+                  {entry.location && (
+                    <>
+                      <br />
+                      {entry.location}
+                    </>
+                  )}
+                </p>
+              </>
+            </header>
+            <ul>
+              {entry.points.map((point) => (
+                <li>{point}</li>
+              ))}
+            </ul>
+          </>
+        </article>
+      ))
+    }
+  </div>
+</section>

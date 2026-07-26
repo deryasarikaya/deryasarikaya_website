@@ -1,0 +1,94 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import type { Language } from '../../data/types';
+import { routeFor } from '../../data/routes';
+interface Props {
+  lang: Language;
+}
+const { lang } = Astro.props;
+const de = lang === 'de';
+const title = de ? 'Über mich | Derya Sarikaya' : 'About | Derya Sarikaya';
+const description = de
+  ? 'Über Derya Sarikaya: Diplom-Ingenieurin, AI Solutions Engineer und technische Beraterin mit internationaler Erfahrung.'
+  : 'About Derya Sarikaya: engineer, AI Solutions Engineer and technical consultant with international experience.';
+const paragraphs = de
+  ? [
+      'Diplom-Ingenieurin, AI Solutions Engineer und jemand, der Dinge gerne wirklich versteht.',
+      'Nach mehr als zehn Jahren im Engineering und in der Automobilindustrie habe ich begonnen, Technologie neu zu denken – mit Software, KI und digitalen Produkten.',
+      'Ich liebe es, komplexe Probleme einfach zu machen. Ich habe in verschiedenen Ländern gelebt, gemeinsam mit meinem Sohn die Welt bereist und immer wieder neue Wege eingeschlagen. Dabei habe ich gelernt, Chancen dort zu erkennen, wo andere zunächst vor allem Hindernisse sehen.',
+      'Heute verbinde ich meine technische Erfahrung mit moderner AI- und Backend-Entwicklung. Ich baue Anwendungen, die nicht nur interessant klingen, sondern reale Abläufe strukturieren, vereinfachen und verbessern.',
+      'Diese Website ist mein digitales Zuhause. Hier zeige ich, woran ich arbeite, was ich lerne und welche Ideen ich in funktionierende Lösungen verwandle.',
+    ]
+  : [
+      'Dipl.-Ing. (FH), AI Solutions Engineer and someone who likes to understand how things really work.',
+      'After more than ten years in engineering and the automotive industry, I began rethinking technology through software, AI and digital products.',
+      'I love making complex problems easier to understand. I have lived in different countries, travelled the world with my son and repeatedly chosen new paths. That taught me to see opportunities where others initially see obstacles.',
+      'Today, I combine my engineering experience with modern AI and backend development. I build applications that do more than sound interesting: they structure, simplify and improve real workflows.',
+      'This website is my digital home. It is where I share what I am building, what I am learning and how I turn ideas into working solutions.',
+    ];
+const facts = de
+  ? [
+      'Diplom-Ingenieurin Fahrzeugtechnologie',
+      '10+ Jahre Mercedes-Benz-Umfeld',
+      'Software & AI Engineering',
+      'Stuttgart / Remote',
+      'Internationale Erfahrung',
+      'Systemdenken',
+      'Technische Beratung',
+      'Praktische Problemlösung',
+    ]
+  : [
+      'Dipl.-Ing. (FH), Automotive Engineering',
+      '10+ years Mercedes-Benz environment',
+      'Software & AI Engineering',
+      'Stuttgart / Remote',
+      'International experience',
+      'Systems thinking',
+      'Technical consulting',
+      'Practical problem solving',
+    ];
+---
+
+<BaseLayout {lang} routeKey="about" {title} {description}>
+  <article class="page shell">
+    <header class="page-header">
+      <p class="eyebrow">{de ? 'Über mich' : 'About'}</p><h1>
+        {de ? 'Hi, ich bin Derya.' : "Hi, I'm Derya."}
+      </h1><p>{paragraphs[0]}</p>
+    </header>
+    <div class="about-story">
+      <div class="story-index" aria-hidden="true"><span>01</span><i></i><span>05</span></div>
+      <div class="prose prose-large">
+        {paragraphs.slice(1).map((paragraph) => <p>{paragraph}</p>)}
+      </div>
+    </div>
+    <section class="facts-section" aria-labelledby="facts-title">
+      <p class="eyebrow">{de ? 'Was ich mitbringe' : 'What I bring'}</p><h2 id="facts-title">
+        {de ? 'Technik mit Kontext.' : 'Technology with context.'}
+      </h2><ul class="facts-grid">
+        {
+          facts.map((fact, i) => (
+            <li>
+              <span>{String(i + 1).padStart(2, '0')}</span>
+              {fact}
+            </li>
+          ))
+        }
+      </ul>
+    </section>
+    <blockquote>
+      {
+        de
+          ? 'Ich denke in Zusammenhängen, bewege mich zwischen Welten und baue mit Sinn.'
+          : 'I think in connections, move between worlds and build with purpose.'
+      }
+    </blockquote>
+    <div class="page-actions">
+      <a class="button button-primary" href={routeFor('projects', lang)}
+        >{de ? 'Projekte ansehen' : 'View projects'} →</a
+      ><a class="button button-secondary" href={routeFor('cv', lang)}
+        >{de ? 'Lebenslauf ansehen' : 'View CV'} →</a
+      >
+    </div>
+  </article>
+</BaseLayout>

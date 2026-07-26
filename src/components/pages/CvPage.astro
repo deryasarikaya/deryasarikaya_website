@@ -1,0 +1,75 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import CvSection from '../cv/CvSection.astro';
+import { cvDe } from '../../data/cv.de';
+import { cvEn } from '../../data/cv.en';
+import type { Language } from '../../data/types';
+interface Props {
+  lang: Language;
+}
+const { lang } = Astro.props;
+const de = lang === 'de';
+const cv = de ? cvDe : cvEn;
+const title = de ? 'Lebenslauf | Derya Sarikaya' : 'CV | Derya Sarikaya';
+const description = de
+  ? 'Webbasierter Lebenslauf von Derya Sarikaya mit Engineering-, Beratungs-, AI- und Backend-Erfahrung.'
+  : "Derya Sarikaya's web CV covering engineering, consulting, AI and backend experience.";
+---
+
+<BaseLayout {lang} routeKey="cv" {title} {description}>
+  <article class="page shell cv-page">
+    <header class="cv-header">
+      <div>
+        <p class="eyebrow">{de ? 'Lebenslauf' : 'Curriculum vitae'}</p><h1>
+          Derya Sarikaya, Dipl.-Ing. (FH)
+        </h1><p class="role-line">AI Solutions Engineer | Technical AI Consultant</p><p>
+          Stuttgart, {de ? 'Deutschland' : 'Germany'} · Remote
+        </p>
+      </div>{
+        !de && (
+          <a class="button button-primary" href="/cv/Derya_Sarikaya_CV_EN.pdf" download>
+            {cv.labels.download} ↓
+          </a>
+        )
+      }
+    </header>
+    <section class="cv-profile">
+      <h2>{cv.labels.profile}</h2><p>{cv.profile}</p><div class="cv-links">
+        <a href="https://linkedin.com/in/deryasarikaya" target="_blank" rel="noreferrer"
+          >LinkedIn ↗</a
+        ><a href="https://github.com/deryasarikaya" target="_blank" rel="noreferrer">GitHub ↗</a
+        ><span
+          >info@deryasarikaya.ai <small
+            >({de ? 'Aktivierung noch nicht bestätigt' : 'activation not yet confirmed'})</small
+          ></span
+        >
+      </div>
+    </section>
+    <div class="cv-layout">
+      <aside class="cv-skills">
+        <h2>{cv.labels.skills}</h2>{
+          cv.skills.map((group) => (
+            <section>
+              <>
+                <h3>{group.title}</h3>
+                <p>{group.items.join(' · ')}</p>
+              </>
+            </section>
+          ))
+        }<h2>{cv.labels.languages}</h2><ul>
+          {cv.languages.map((language) => <li>{language}</li>)}
+        </ul>
+      </aside><div>
+        <CvSection title={cv.labels.education} entries={cv.education} id="cv-education" /><CvSection
+          title={cv.labels.projects}
+          entries={cv.projects}
+          id="cv-projects"
+        /><CvSection
+          title={cv.labels.experience}
+          entries={cv.experience}
+          id="cv-experience"
+        /><CvSection title={cv.labels.early} entries={cv.earlyExperience} id="cv-early" />
+      </div>
+    </div>
+  </article>
+</BaseLayout>

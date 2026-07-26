@@ -1,0 +1,96 @@
+---
+import '@fontsource-variable/fraunces';
+import '@fontsource-variable/manrope';
+import '@fontsource-variable/jetbrains-mono';
+import '../styles/global.css';
+import Header from '../components/navigation/Header.astro';
+import Footer from '../components/navigation/Footer.astro';
+import type { Language, RouteKey } from '../data/types';
+import { routes, SITE_URL } from '../data/routes';
+import { siteCopy } from '../data/site';
+
+interface Props {
+  lang: Language;
+  routeKey: RouteKey;
+  title: string;
+  description: string;
+  noindex?: boolean;
+  image?: string;
+  structuredData?: Record<string, unknown> | Record<string, unknown>[];
+}
+
+const {
+  lang,
+  routeKey,
+  title,
+  description,
+  noindex = false,
+  image = '/images/social/derya-sarikaya-og.webp',
+  structuredData,
+} = Astro.props;
+const copy = siteCopy[lang];
+const canonicalPath = routes[routeKey][lang];
+const otherLang: Language = lang === 'de' ? 'en' : 'de';
+const canonical = new URL(canonicalPath, SITE_URL).href;
+const imageUrl = new URL(image, SITE_URL).href;
+const defaultStructuredData = [
+  {
+    '@context': 'https://schema.org',
+    '@type': 'Person',
+    name: 'Derya Sarikaya',
+    jobTitle: 'AI Solutions Engineer | Technical AI Consultant',
+    url: SITE_URL,
+    homeLocation: { '@type': 'Place', name: 'Stuttgart, Germany' },
+    sameAs: ['https://github.com/deryasarikaya', 'https://linkedin.com/in/deryasarikaya'],
+  },
+  {
+    '@context': 'https://schema.org',
+    '@type': 'WebSite',
+    name: 'Derya Sarikaya',
+    url: SITE_URL,
+    inLanguage: ['de-DE', 'en-US'],
+  },
+];
+const jsonLd = structuredData ?? defaultStructuredData;
+---
+
+<!doctype html>
+<html lang={lang}>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width" />
+    <meta name="description" content={description} />
+    <meta name="theme-color" content="#f6f2ea" />
+    {noindex && <meta name="robots" content="noindex, nofollow" />}
+    <link rel="canonical" href={canonical} />
+    <link rel="alternate" hreflang="de-DE" href={new URL(routes[routeKey].de, SITE_URL)} />
+    <link rel="alternate" hreflang="en-US" href={new URL(routes[routeKey].en, SITE_URL)} />
+    <link rel="alternate" hreflang="x-default" href={new URL(routes[routeKey].de, SITE_URL)} />
+    <link rel="icon" type="image/png" sizes="512x512" href="/icons/favicon.png" />
+    <link rel="apple-touch-icon" sizes="180x180" href="/icons/apple-touch-icon.png" />
+    <link rel="manifest" href="/site.webmanifest" />
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={canonical} />
+    <meta property="og:image" content={imageUrl} />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:locale" content={copy.locale} />
+    <meta property="og:locale:alternate" content={siteCopy[otherLang].locale} />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={title} />
+    <meta name="twitter:description" content={description} />
+    <meta name="twitter:image" content={imageUrl} />
+    <script is:inline type="application/ld+json" set:html={JSON.stringify(jsonLd)} />
+    <title>{title}</title>
+  </head>
+  <body id="top">
+    <a class="skip-link" href="#main-content">{copy.common.skip}</a>
+    <Header {lang} {routeKey} />
+    <main id="main-content">
+      <slot />
+    </main>
+    <Footer {lang} />
+  </body>
+</html>

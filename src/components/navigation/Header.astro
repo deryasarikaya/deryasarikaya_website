@@ -1,0 +1,113 @@
+---
+import type { Language, RouteKey } from '../../data/types';
+import { routeFor, routes } from '../../data/routes';
+import { siteCopy } from '../../data/site';
+
+interface Props {
+  lang: Language;
+  routeKey: RouteKey;
+}
+
+const { lang, routeKey } = Astro.props;
+const copy = siteCopy[lang];
+---
+
+<header class="site-header" data-header>
+  <nav class="nav-shell shell" aria-label={lang === 'de' ? 'Hauptnavigation' : 'Main navigation'}>
+    <a class="brand-mark" href={routeFor('home', lang)} aria-label="Derya Sarikaya – Home">
+      <img src="/images/brand/logo-transparent.png" width="48" height="48" alt="" />
+    </a>
+    <button
+      class="menu-toggle"
+      type="button"
+      aria-expanded="false"
+      aria-controls="primary-navigation"
+      aria-label={copy.common.menuOpen}
+      data-menu-toggle
+    >
+      <span></span><span></span><span></span>
+    </button>
+    <div class="nav-panel" id="primary-navigation" data-nav-panel>
+      <ul class="nav-list">
+        {
+          copy.nav.map((item) => (
+            <li>
+              <a
+                href={routeFor(item.key, lang)}
+                aria-current={routeKey === item.key ? 'page' : undefined}
+              >
+                {item.label}
+              </a>
+            </li>
+          ))
+        }
+      </ul>
+      <div
+        class="language-switch"
+        aria-label={lang === 'de' ? 'Sprache wählen' : 'Choose language'}
+      >
+        <a
+          href={routes[routeKey].de}
+          aria-current={lang === 'de' ? 'page' : undefined}
+          data-language="de">DE</a
+        >
+        <span aria-hidden="true">|</span>
+        <a
+          href={routes[routeKey].en}
+          aria-current={lang === 'en' ? 'page' : undefined}
+          data-language="en">EN</a
+        >
+      </div>
+    </div>
+  </nav>
+</header>
+
+<script>
+  const header = document.querySelector<HTMLElement>('[data-header]');
+  const toggle = document.querySelector<HTMLButtonElement>('[data-menu-toggle]');
+  const panel = document.querySelector<HTMLElement>('[data-nav-panel]');
+
+  const closeMenu = () => {
+    if (!header || !toggle) return;
+    header.classList.remove('menu-open');
+    toggle.setAttribute('aria-expanded', 'false');
+    toggle.setAttribute(
+      'aria-label',
+      document.documentElement.lang === 'de' ? 'Menü öffnen' : 'Open menu',
+    );
+    document.body.classList.remove('nav-locked');
+  };
+
+  toggle?.addEventListener('click', () => {
+    if (!header || !toggle) return;
+    const open = !header.classList.contains('menu-open');
+    header.classList.toggle('menu-open', open);
+    toggle.setAttribute('aria-expanded', String(open));
+    toggle.setAttribute(
+      'aria-label',
+      open
+        ? document.documentElement.lang === 'de'
+          ? 'Menü schließen'
+          : 'Close menu'
+        : document.documentElement.lang === 'de'
+          ? 'Menü öffnen'
+          : 'Open menu',
+    );
+    document.body.classList.toggle('nav-locked', open);
+    if (open) panel?.querySelector<HTMLAnchorElement>('a')?.focus();
+  });
+
+  panel?.querySelectorAll('a').forEach((link) => link.addEventListener('click', closeMenu));
+  document.addEventListener('keydown', (event) => {
+    if (event.key === 'Escape') {
+      closeMenu();
+      toggle?.focus();
+    }
+  });
+
+  document.querySelectorAll<HTMLAnchorElement>('[data-language]').forEach((link) => {
+    link.addEventListener('click', () =>
+      localStorage.setItem('portfolio-language', link.dataset.language || 'de'),
+    );
+  });
+</script>

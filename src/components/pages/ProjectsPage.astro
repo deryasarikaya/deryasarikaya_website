@@ -1,0 +1,37 @@
+---
+import { getCollection } from 'astro:content';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import ProjectCard from '../projects/ProjectCard.astro';
+import type { Language } from '../../data/types';
+interface Props {
+  lang: Language;
+}
+const { lang } = Astro.props;
+const de = lang === 'de';
+const projects = (
+  lang === 'de' ? await getCollection('projectsDe') : await getCollection('projectsEn')
+).sort((a, b) => a.data.order - b.data.order);
+const title = de ? 'Projekte | Derya Sarikaya' : 'Projects | Derya Sarikaya';
+const description = de
+  ? 'AI-, Backend- und Softwareprojekte von Derya Sarikaya: AI Start Map, Kompass und MoviWebApp.'
+  : 'AI, backend and software projects by Derya Sarikaya: AI Start Map, Kompass and MoviWebApp.';
+---
+
+<BaseLayout {lang} routeKey="projects" {title} {description}>
+  <section class="page shell projects-page">
+    <header class="page-header">
+      <p class="eyebrow">Portfolio / 2026</p><h1>
+        {de ? 'Ausgewählte Projekte' : 'Selected projects'}
+      </h1><p>
+        {
+          de
+            ? 'Praktische Systeme, in denen AI, Backend-Entwicklung und strukturiertes Denken zusammenkommen.'
+            : 'Practical systems where AI, backend development and structured thinking come together.'
+        }
+      </p>
+    </header>
+    <div class="projects-grid projects-grid-page">
+      {projects.map((project) => <ProjectCard {project} {lang} />)}
+    </div>
+  </section>
+</BaseLayout>

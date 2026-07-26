@@ -1,0 +1,52 @@
+---
+import { Picture } from 'astro:assets';
+import heroImage from '../../assets/images/hero/derya-laptop-coconut.png';
+import CodeTerminal from './CodeTerminal.astro';
+import type { Language } from '../../data/types';
+import { routeFor } from '../../data/routes';
+import { siteCopy } from '../../data/site';
+interface Props {
+  lang: Language;
+}
+const { lang } = Astro.props;
+const copy = siteCopy[lang];
+---
+
+<section class="hero shell" aria-labelledby="hero-title">
+  <div class="hero-copy">
+    <p class="hero-name">Derya Sarikaya</p>
+    <p class="eyebrow">{copy.hero.role}</p>
+    <h1 id="hero-title">
+      {copy.hero.headlineStart}
+      {' '}
+      <em>{copy.hero.headlineAccent}</em>
+      {' '}
+      {copy.hero.headlineEnd}
+    </h1>
+    <div class="hero-intro">{copy.hero.intro.map((paragraph) => <p>{paragraph}</p>)}</div>
+    <div class="actions">
+      <a class="button button-primary" href={routeFor('projects', lang)}
+        >{copy.hero.projectsCta} <span aria-hidden="true">→</span></a
+      >
+      <a class="button button-secondary" href={routeFor('cv', lang)}
+        >{copy.hero.cvCta} <span aria-hidden="true">→</span></a
+      >
+    </div>
+    <p class="quiet-statement">{copy.hero.statement}</p>
+  </div>
+  <div class="hero-media">
+    <div class="hero-image-frame">
+      <Picture
+        src={heroImage}
+        formats={['avif', 'webp']}
+        widths={[480, 720, 960, 1254]}
+        sizes="(max-width: 760px) 100vw, 52vw"
+        alt={copy.hero.imageAlt}
+        priority
+        layout="full-width"
+      />
+      <span class="image-index" aria-hidden="true">01 / 01</span>
+    </div>
+    <CodeTerminal {lang} />
+  </div>
+</section>

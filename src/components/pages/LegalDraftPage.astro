@@ -1,0 +1,81 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import type { Language, RouteKey } from '../../data/types';
+import { siteCopy } from '../../data/site';
+interface Props {
+  lang: Language;
+  kind: 'legal' | 'privacy';
+}
+const { lang, kind } = Astro.props;
+const de = lang === 'de';
+const copy = siteCopy[lang];
+const routeKey: RouteKey = kind;
+const title =
+  kind === 'legal'
+    ? de
+      ? 'Impressum – Entwurf | Derya Sarikaya'
+      : 'Legal notice – Draft | Derya Sarikaya'
+    : de
+      ? 'Datenschutz – Entwurf | Derya Sarikaya'
+      : 'Privacy – Draft | Derya Sarikaya';
+const heading =
+  kind === 'legal' ? (de ? 'Impressum' : 'Legal notice') : de ? 'Datenschutz' : 'Privacy policy';
+const intro =
+  kind === 'legal'
+    ? de
+      ? 'Die gesetzlich erforderlichen Anbieterinformationen liegen noch nicht vollständig und rechtlich geprüft vor.'
+      : 'The legally required provider information is not yet complete or legally reviewed.'
+    : de
+      ? 'Die finale Datenschutzerklärung muss die tatsächlich aktivierten Dienste und ihre Datenverarbeitung abbilden.'
+      : 'The final privacy policy must reflect the services that are actually enabled and how they process data.';
+---
+
+<BaseLayout {lang} {routeKey} {title} description={intro} noindex>
+  <article class="page shell legal-page">
+    <header class="page-header">
+      <p class="draft-badge">{copy.common.draft}</p><h1>{heading}</h1><p>{intro}</p>
+    </header><div class="legal-draft">
+      <h2>{de ? 'Interner Launch-Hinweis' : 'Internal launch notice'}</h2><p>
+        {
+          de
+            ? 'Diese Seite ist nur als technische Vorschau vorhanden. Sie darf nicht als vollständige Rechtsinformation veröffentlicht werden.'
+            : 'This page exists only as a technical preview. It must not be published as complete legal information.'
+        }
+      </p><h2>{de ? 'Vor Veröffentlichung erforderlich' : 'Required before publication'}</h2><ul>
+        <li>
+          {
+            de
+              ? 'Vollständige und geprüfte Anbieterangaben'
+              : 'Complete and reviewed provider information'
+          }
+        </li><li>
+          {de ? 'Rechtsgrundlagen und Verantwortlichkeiten' : 'Legal bases and controller details'}
+        </li><li>
+          {
+            de
+              ? 'Angaben zu Vercel, Serverprotokollen und eingebundenen Diensten'
+              : 'Information about Vercel, server logs and enabled services'
+          }
+        </li><li>
+          {
+            de
+              ? 'Angaben zu Kontaktformular/Resend, sofern aktiviert'
+              : 'Information about the contact form and Resend, if enabled'
+          }
+        </li><li>
+          {
+            de
+              ? 'Angaben zum OpenAI Portfolio-Guide, sofern aktiviert'
+              : 'Information about the OpenAI Portfolio Guide, if enabled'
+          }
+        </li>
+      </ul><p class="configuration-note">
+        TODO: {
+          de
+            ? 'Finalen Text rechtlich prüfen und freigeben.'
+            : 'Have the final text legally reviewed and approved.'
+        }
+      </p>
+    </div>
+  </article>
+</BaseLayout>

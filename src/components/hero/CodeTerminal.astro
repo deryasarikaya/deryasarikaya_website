@@ -1,0 +1,78 @@
+---
+import type { Language } from '../../data/types';
+import { siteCopy } from '../../data/site';
+interface Props {
+  lang: Language;
+}
+const { lang } = Astro.props;
+const copy = siteCopy[lang];
+const lines = [
+  { html: '<span class="tok-comment"># derya_sarikaya.py</span>' },
+  {
+    html: '<span class="tok-keyword">from</span> engineering <span class="tok-keyword">import</span> systems_thinking',
+  },
+  {
+    html: '<span class="tok-keyword">from</span> ai <span class="tok-keyword">import</span> llm_apps, rag, agents',
+  },
+  {
+    html: '<span class="tok-keyword">from</span> backend <span class="tok-keyword">import</span> python, fastapi, postgresql',
+  },
+  { html: '' },
+  { html: '<span class="tok-function">print</span>(building_useful_ai())' },
+];
+---
+
+<div class="terminal" role="region" aria-label={copy.hero.terminalLabel} data-terminal>
+  <div class="terminal-bar" aria-hidden="true">
+    <span></span><span></span><span></span>
+    <p>derya_sarikaya.py</p>
+  </div>
+  <ol class="terminal-code">
+    {
+      lines.map((line) => (
+        <li>
+          <code set:html={line.html || '&nbsp;'} />
+        </li>
+      ))
+    }
+  </ol>
+  <p class="terminal-output">
+    <span aria-hidden="true">›</span>
+    {copy.hero.terminalOutput}<span class="terminal-cursor" aria-hidden="true"></span>
+  </p>
+  <button class="terminal-replay" type="button" data-terminal-replay
+    >{lang === 'de' ? 'Wiederholen' : 'Replay'}</button
+  >
+</div>
+
+<script>
+  const terminals = document.querySelectorAll<HTMLElement>('[data-terminal]');
+  const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  terminals.forEach((terminal) => {
+    if (reducedMotion) {
+      terminal.dataset.complete = 'true';
+      return;
+    }
+    const run = () => {
+      terminal.dataset.complete = 'false';
+      const lines = terminal.querySelectorAll<HTMLElement>('li');
+      const output = terminal.querySelector<HTMLElement>('.terminal-output');
+      lines.forEach((line, index) => {
+        line.style.animationDelay = `${index * 260}ms`;
+      });
+      if (output) output.style.animationDelay = `${lines.length * 260 + 180}ms`;
+      requestAnimationFrame(() => (terminal.dataset.complete = 'true'));
+    };
+    const observer = new IntersectionObserver(
+      (entries) => {
+        if (entries.some((entry) => entry.isIntersecting)) {
+          run();
+          observer.disconnect();
+        }
+      },
+      { threshold: 0.35 },
+    );
+    observer.observe(terminal);
+    terminal.querySelector('[data-terminal-replay]')?.addEventListener('click', run);
+  });
+</script>
