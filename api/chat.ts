@@ -1,7 +1,7 @@
 import OpenAI from 'openai';
-import { answerFallback, publicKnowledge } from '../src/data/portfolioKnowledge';
-import { routes } from '../src/data/routes';
-import type { Language } from '../src/data/types';
+import { answerFallback, publicKnowledge } from '../src/data/portfolioKnowledge.js';
+import { routes } from '../src/data/routes.js';
+import type { Language } from '../src/data/types.js';
 
 interface ApiRequest {
   method?: string;

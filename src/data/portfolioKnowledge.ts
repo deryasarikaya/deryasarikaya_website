@@ -1,5 +1,5 @@
-import type { Language } from './types';
-import { routeFor } from './routes';
+import type { Language } from './types.js';
+import { routeFor } from './routes.js';
 
 export type GuideIntent =
   'ai-project' | 'ai-start-map' | 'backend' | 'compare' | 'cv' | 'contact' | 'unknown';

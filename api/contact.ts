@@ -1,5 +1,5 @@
 import { Resend } from 'resend';
-import { validateContact } from '../src/lib/contact';
+import { validateContact } from '../src/lib/contact.js';
 
 interface ApiRequest {
   method?: string;

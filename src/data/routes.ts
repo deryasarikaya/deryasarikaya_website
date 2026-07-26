@@ -1,4 +1,4 @@
-import type { Language, RouteKey } from './types';
+import type { Language, RouteKey } from './types.js';
 
 export const SITE_URL = 'https://deryasarikaya.ai';
 
