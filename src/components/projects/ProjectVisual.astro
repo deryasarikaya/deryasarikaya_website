@@ -1,0 +1,62 @@
+---
+import { Picture } from 'astro:assets';
+import moviScreenshot from '../../assets/images/projects/moviweb-homepage.png';
+interface Props {
+  kind: 'workflow' | 'pipeline' | 'screenshot';
+  alt: string;
+  lang: 'de' | 'en';
+}
+const { kind, alt, lang } = Astro.props;
+const workflow =
+  lang === 'de'
+    ? ['Kontext', 'Prozess', 'Rückfragen', 'RAG', 'Priorisierung']
+    : ['Context', 'Process', 'Follow-ups', 'RAG', 'Prioritisation'];
+const pipeline = [
+  'WhatsApp',
+  'ffmpeg',
+  'Whisper',
+  'LLM',
+  'PostgreSQL',
+  lang === 'de' ? 'Muster' : 'Patterns',
+];
+---
+
+{
+  kind === 'screenshot' ? (
+    <figure class="project-screenshot">
+      <Picture
+        src={moviScreenshot}
+        formats={['avif', 'webp']}
+        widths={[640, 960, 1280]}
+        sizes="(max-width: 900px) 100vw, 900px"
+        alt={alt}
+        loading="lazy"
+        layout="full-width"
+      />
+      <figcaption>
+        {lang === 'de'
+          ? 'Originalansicht aus dem MoviWebApp-Repository.'
+          : 'Original view from the MoviWebApp repository.'}
+      </figcaption>
+    </figure>
+  ) : (
+    <figure class="architecture-visual" role="img" aria-label={alt}>
+      <div class="architecture-track">
+        {(kind === 'workflow' ? workflow : pipeline).map((label, index, items) => (
+          <>
+            <span class="architecture-node">
+              <small>{String(index + 1).padStart(2, '0')}</small>
+              {label}
+            </span>
+            {index < items.length - 1 && <i aria-hidden="true">→</i>}
+          </>
+        ))}
+      </div>
+      <figcaption>
+        {lang === 'de'
+          ? 'Vereinfachte Architektur auf Basis des aktuellen Repository-Standes.'
+          : 'Simplified architecture based on the current repository.'}
+      </figcaption>
+    </figure>
+  )
+}

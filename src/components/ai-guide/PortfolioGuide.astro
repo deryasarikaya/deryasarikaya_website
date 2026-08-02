@@ -1,0 +1,150 @@
+---
+import type { Language } from '../../data/types';
+import { guideQuestions } from '../../data/portfolioKnowledge';
+interface Props {
+  lang: Language;
+  compact?: boolean;
+}
+const { lang, compact = false } = Astro.props;
+const labels =
+  lang === 'de'
+    ? {
+        title: 'Frag meinen Portfolio-Guide',
+        intro: 'Stelle eine Frage zu Projekten, Erfahrung oder dem Lebenslauf.',
+        open: 'Portfolio-Guide öffnen',
+        close: 'Dialog schließen',
+        mode: 'Portfolio-Guide im lokalen Demo-Modus',
+        input: 'Deine Frage',
+        placeholder: 'Was möchtest du wissen?',
+        send: 'Fragen',
+        starter: 'Zum Einstieg',
+        you: 'Du',
+        guide: 'Portfolio-Guide',
+        waiting: 'Antwort wird vorbereitet …',
+      }
+    : {
+        title: 'Ask my AI Portfolio Guide',
+        intro: 'Ask about projects, experience or the CV.',
+        open: 'Open Portfolio Guide',
+        close: 'Close dialog',
+        mode: 'Portfolio Guide in local demo mode',
+        input: 'Your question',
+        placeholder: 'What would you like to know?',
+        send: 'Ask',
+        starter: 'Start with a question',
+        you: 'You',
+        guide: 'Portfolio Guide',
+        waiting: 'Preparing an answer …',
+      };
+---
+
+<div class:list={['guide-launch', { compact }]} data-guide-root data-lang={lang}>
+  <button class="button button-primary" type="button" data-guide-open
+    >{labels.open} <span aria-hidden="true">↗</span></button
+  >
+  <dialog class="guide-dialog" data-guide-dialog aria-labelledby={`guide-title-${lang}`}>
+    <div class="guide-shell">
+      <header>
+        <div>
+          <p class="eyebrow">{labels.mode}</p><h2 id={`guide-title-${lang}`}>{labels.title}</h2><p>
+            {labels.intro}
+          </p>
+        </div>
+        <button class="icon-button" type="button" data-guide-close aria-label={labels.close}
+          >×</button
+        >
+      </header>
+      <div class="guide-log" data-guide-log aria-live="polite"></div>
+      <div class="guide-starters" data-guide-starters>
+        <p>{labels.starter}</p>
+        {
+          guideQuestions[lang].map((question) => (
+            <button type="button" data-guide-question={question}>
+              {question}
+            </button>
+          ))
+        }
+      </div>
+      <form class="guide-form" data-guide-form>
+        <label for={`guide-input-${lang}`}>{labels.input}</label>
+        <div>
+          <input
+            id={`guide-input-${lang}`}
+            name="question"
+            maxlength="500"
+            required
+            placeholder={labels.placeholder}
+          /><button class="button button-primary" type="submit">{labels.send}</button>
+        </div>
+      </form>
+    </div>
+  </dialog>
+</div>
+
+<script>
+  import { answerFallback } from '../../data/portfolioKnowledge';
+  import type { Language } from '../../data/types';
+  document.querySelectorAll<HTMLElement>('[data-guide-root]').forEach((root) => {
+    const lang = (root.dataset.lang || 'de') as Language;
+    const dialog = root.querySelector<HTMLDialogElement>('[data-guide-dialog]');
+    const log = root.querySelector<HTMLElement>('[data-guide-log]');
+    const form = root.querySelector<HTMLFormElement>('[data-guide-form]');
+    const input = form?.querySelector<HTMLInputElement>('input');
+    const addMessage = (
+      role: 'user' | 'guide',
+      text: string,
+      links: { label: string; href: string }[] = [],
+    ) => {
+      if (!log) return;
+      const article = document.createElement('article');
+      article.className = `guide-message guide-message-${role}`;
+      const label = document.createElement('strong');
+      label.textContent = role === 'user' ? (lang === 'de' ? 'Du' : 'You') : 'Portfolio Guide';
+      const paragraph = document.createElement('p');
+      paragraph.textContent = text;
+      article.append(label, paragraph);
+      links.forEach((item) => {
+        const link = document.createElement('a');
+        link.href = item.href;
+        link.textContent = `${item.label} →`;
+        article.append(link);
+      });
+      log.append(article);
+      log.scrollTop = log.scrollHeight;
+    };
+    const answer = async (question: string) => {
+      addMessage('user', question);
+      const fallback = answerFallback(question, lang);
+      try {
+        const response = await fetch('/api/chat', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ question, language: lang, conversation: [] }),
+        });
+        if (!response.ok) throw new Error('fallback');
+        const data = await response.json();
+        addMessage('guide', data.answer, data.links || []);
+      } catch {
+        addMessage('guide', fallback.answer, fallback.links);
+      }
+    };
+    root.querySelector('[data-guide-open]')?.addEventListener('click', () => dialog?.showModal());
+    root.querySelector('[data-guide-close]')?.addEventListener('click', () => dialog?.close());
+    dialog?.addEventListener('click', (event) => {
+      if (event.target === dialog) dialog.close();
+    });
+    root
+      .querySelectorAll<HTMLButtonElement>('[data-guide-question]')
+      .forEach((button) =>
+        button.addEventListener('click', () => answer(button.dataset.guideQuestion || '')),
+      );
+    form?.addEventListener('submit', (event) => {
+      event.preventDefault();
+      if (!input) return;
+      const value = input.value.trim();
+      if (!value) return;
+      input.value = '';
+      answer(value);
+    });
+  });
+</script>

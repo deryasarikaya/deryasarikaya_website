@@ -1,0 +1,88 @@
+---
+import { getCollection } from 'astro:content';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Hero from '../hero/Hero.astro';
+import ExpertiseStrip from '../shared/ExpertiseStrip.astro';
+import ProjectCard from '../projects/ProjectCard.astro';
+import PortfolioGuide from '../ai-guide/PortfolioGuide.astro';
+import type { Language } from '../../data/types';
+import { routeFor } from '../../data/routes';
+import { siteCopy } from '../../data/site';
+interface Props {
+  lang: Language;
+}
+const { lang } = Astro.props;
+const copy = siteCopy[lang];
+const projects = (
+  lang === 'de' ? await getCollection('projectsDe') : await getCollection('projectsEn')
+).sort((a, b) => a.data.order - b.data.order);
+const title = 'Derya Sarikaya | AI Solutions Engineer & Technical AI Consultant';
+const description =
+  lang === 'de'
+    ? 'Derya Sarikaya entwickelt praktische AI-Anwendungen, LLM-Workflows und Backend-Lösungen mit Engineering-Erfahrung und Systemdenken.'
+    : 'Derya Sarikaya builds practical AI applications, LLM workflows and backend solutions with an engineering background and systems thinking.';
+---
+
+<BaseLayout {lang} routeKey="home" {title} {description}>
+  <div id="top"></div>
+  <Hero {lang} />
+  <ExpertiseStrip {lang} />
+
+  <section class="section shell home-about split-editorial">
+    <div><p class="eyebrow">{copy.home.aboutEyebrow}</p><h2>{copy.home.aboutTitle}</h2></div>
+    <div class="prose-lead">
+      <p><strong>{copy.home.aboutIntro}</strong></p><p>{copy.home.aboutBody}</p><a
+        class="text-link"
+        href={routeFor('about', lang)}>{copy.home.aboutLink} →</a
+      >
+    </div>
+  </section>
+
+  <section class="section shell">
+    <header class="section-heading">
+      <div>
+        <p class="eyebrow">{copy.home.projectsEyebrow}</p><h2>{copy.home.projectsTitle}</h2>
+      </div><p>{copy.home.projectsIntro}</p>
+    </header>
+    <div class="projects-grid">{projects.map((project) => <ProjectCard {project} {lang} />)}</div>
+    <a class="text-link section-link" href={routeFor('projects', lang)}
+      >{copy.home.projectsLink} →</a
+    >
+  </section>
+
+  <section class="section guide-section">
+    <div class="shell guide-feature">
+      <div>
+        <p class="eyebrow">{copy.home.guideEyebrow}</p><h2>{copy.home.guideTitle}</h2><p>
+          {copy.home.guideBody}
+        </p>
+      </div><PortfolioGuide {lang} />
+    </div>
+  </section>
+
+  <section class="section shell cv-preview split-editorial">
+    <div><p class="eyebrow">{copy.home.cvEyebrow}</p><h2>{copy.home.cvTitle}</h2></div>
+    <div>
+      <p>{copy.home.cvBody}</p><div class="cv-metrics">
+        <span
+          ><strong>10+</strong>{lang === 'de' ? 'Jahre Engineering' : 'years in engineering'}</span
+        ><span
+          ><strong>50+</strong>{
+            lang === 'de' ? 'internationale Märkte' : 'international markets'
+          }</span
+        ><span><strong>3</strong>{lang === 'de' ? 'aktuelle Projekte' : 'current projects'}</span>
+      </div><a class="button button-secondary" href={routeFor('cv', lang)}>{copy.hero.cvCta} →</a>
+    </div>
+  </section>
+
+  <section class="contact-band">
+    <div class="shell">
+      <p class="eyebrow">{lang === 'de' ? 'Kontakt' : 'Contact'}</p><h2>
+        {copy.home.contactTitle}
+      </h2><p>{copy.home.contactBody}</p><a
+        class="button button-light"
+        href={routeFor('contact', lang)}>{copy.home.contactCta} →</a
+      >
+    </div>
+  </section>
+</BaseLayout>

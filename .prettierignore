@@ -1,0 +1,4 @@
+dist/
+node_modules/
+public/cv/*.pdf
+docs/screenshots/

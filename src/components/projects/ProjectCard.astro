@@ -1,0 +1,39 @@
+---
+import type { CollectionEntry } from 'astro:content';
+import type { Language } from '../../data/types';
+import { routeFor } from '../../data/routes';
+import { siteCopy } from '../../data/site';
+type ProjectEntry = CollectionEntry<'projectsDe'> | CollectionEntry<'projectsEn'>;
+interface Props {
+  project: ProjectEntry;
+  lang: Language;
+}
+const { project, lang } = Astro.props;
+const copy = siteCopy[lang];
+const keys = {
+  'ai-start-map': 'projectAiStartMap',
+  kompass: 'projectKompass',
+  moviwebapp: 'projectMoviWebApp',
+} as const;
+---
+
+<article class="project-card">
+  <div class="project-card-top">
+    <span class={`status status-${project.data.status}`}>{project.data.statusLabel}</span>
+    <span class="project-number">0{project.data.order}</span>
+  </div>
+  <h3>{project.data.title}</h3>
+  <p class="project-tagline">{project.data.tagline}</p>
+  <p>{project.data.summary}</p>
+  <ul class="tag-list" aria-label={lang === 'de' ? 'Technologien' : 'Technologies'}>
+    {project.data.stack.slice(0, 5).map((tech) => <li>{tech}</li>)}
+  </ul>
+  <div class="project-card-links">
+    <a href={routeFor(keys[project.data.slug], lang)}
+      >{copy.common.readCase} <span aria-hidden="true">→</span></a
+    >
+    <a href={project.data.repository} target="_blank" rel="noreferrer"
+      >GitHub <span aria-hidden="true">↗</span></a
+    >
+  </div>
+</article>

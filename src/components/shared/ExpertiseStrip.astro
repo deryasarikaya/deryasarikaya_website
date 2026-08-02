@@ -1,0 +1,28 @@
+---
+import type { Language } from '../../data/types';
+import { siteCopy } from '../../data/site';
+interface Props {
+  lang: Language;
+}
+const { lang } = Astro.props;
+const items = siteCopy[lang].expertise;
+---
+
+<section
+  class="expertise-strip"
+  aria-label={lang === 'de' ? 'Kompetenzfelder' : 'Areas of expertise'}
+>
+  <div class="shell expertise-grid">
+    {
+      items.map((item) => (
+        <article>
+          <>
+            <span>{item.number}</span>
+            <h2>{item.title}</h2>
+            <p>{item.body}</p>
+          </>
+        </article>
+      ))
+    }
+  </div>
+</section>
